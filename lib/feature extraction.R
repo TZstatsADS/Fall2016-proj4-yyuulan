@@ -10,6 +10,7 @@ common_id <- read.table("~/Desktop/Project4_data/common_id.txt", quote="\"", com
 common_id <- as.vector(common_id$V1)
 load("Project4_data/music.RData")
 load("Project4_data/music_new.RData")
+load("Project4_data/factor.all.RData")
 
 # Load the h5 files and save all information into a list variable
 # Save the list variable as  music.Rdata file
@@ -112,6 +113,7 @@ feature.extraction <- function(music_new, i){
 
 i = c(1:13,15,16)
 factor.all <- feature.extraction(music_new, i)
+save(factor.all, file = "Project4_data/factor.all.RData")
 
 
 # Apply PCA to reduce dimension

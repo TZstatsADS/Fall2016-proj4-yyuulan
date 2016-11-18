@@ -134,6 +134,7 @@ save(music.data.transform, file = "Project4_data/music.data.transform.RData")
 library(randomForest)
 load("Project4_data/topic.distribution.RData")
 label <- as.matrix(topic.distribution, ncol = 1)
+load("Project4_data/music.data.transform.RData")
 
 t1 <- Sys.time()
 randomForest.fit <- randomForest(x = music.data.transform, y = as.factor(label))

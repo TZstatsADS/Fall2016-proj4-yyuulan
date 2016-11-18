@@ -138,5 +138,5 @@ label <- as.matrix(topic.distribution, ncol = 1)
 t1 <- Sys.time()
 randomForest.fit <- randomForest(x = music.data.transform, y = as.factor(label))
 t2 <- Sys.time()
-t2 - t1 # Time difference of 6.045216 mins
-
+t2 - t1 # Time difference of 5.638203 mins
+save(randomForest.fit, file = "Fall2016-proj4-yyuulan/data/randomForest.fit.RData")

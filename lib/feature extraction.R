@@ -98,7 +98,7 @@ feature.extraction <- function(music_new, i){
   data.tatums_confidence <- t(data.frame(lapply(music_new, function(x) get_value(x, i[14], n.tatums))))
   data.tatums_start <- t(data.frame(lapply(music_new, function(x) get_value(x, i[15], n.tatums))))
   
-  # try to combine all information of a song into one factor and apply PCA
+  # Try to combine all information of a song into one factor and apply PCA
   factor.all <- cbind(data.bars_confidence,data.bars_start,data.beats_confidence,data.beats_start,
                       data.section_confidence,data.section_start,data.segments_confidence,data.segments_loudness_max,
                       data.segments_loudness_max_time,data.segments_loudness_start,data.segments_start,
@@ -114,35 +114,22 @@ i = c(1:13,15,16)
 factor.all <- feature.extraction(music_new, i)
 
 
-
+# Apply PCA to reduce dimension
 t1 <- Sys.time()
 pca <- prcomp(factor.all, center=TRUE, scale=TRUE);
 t2 <- Sys.time()
 t2 - t1 # Time difference of 10.34193 mins
 
-loading <-- pca$rotation
-save(loading, file = "Project4_data/loading.RData")
-load("Project4_data/loading.RData")
+# Save the loading matrix for future prediciton
+loading <- pca$rotation
+save(loading, file = "Fall2016-proj4-yyuulan/data/loading.RData")
+# Tranform the original data to the reduced dimensional data
 music.data.transform <- factor.all %*% loading
-save(music.data.transform, file = "Project4_data/music.data.transform.RData")
-load("Project4_data/music.data.transform.RData")
+save(music.data.transform, file = "Fall2016-proj4-yyuulan/data/music.data.transform.RData")
 
 
-# try to apply the k means to different factors
-data.name <- paste(rep("data.",13), names(music$TRAAABD128F429CF47[-13]), sep = '')
-k = 30
-wss =  rep(0, k);
-for (i in 1:k) wss[i] =  sum(kmeans(data.name[j], centers = i)$withinss)
-plot(1:k, wss, type = "b", xlab = "Number of groups", ylab = "Within groups sum of squares")
-
-fit <- kmeans(data.bar_confidence, 20)
-# get cluster means 
-aggregate(data.bar_confidence,by=list(fit$cluster),FUN=mean)
-# append cluster assignment
-mydata <- data.frame(mydata, fit$cluster)
-
-####################################################################################
-
+###################################################################################
+# Apply random forest to construct the relationships beween features and predicted topics
 # install.packages("randomForest")
 library(randomForest)
 load("Project4_data/topic.distribution.RData")

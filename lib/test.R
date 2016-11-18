@@ -28,10 +28,12 @@ save(test.music.data.transform, file = "Project4_data/test.music.data.transform.
 
 load("Project4_data/randomForest.fit.RData")
 prob <- predict(randomForest.fit, test.music.data.transform, type = "prob")
+rownames(prob) <- name.order
 prob.test <- matrix(0, ncol = 10, nrow = 100)
-colnames(prob.test) <- as.character(c(1:20))
+colnames(prob.test) <- as.character(c(1:10))
 prob.test[,colnames(prob.test) %in% colnames(prob)] = prob
 pred = prob.test %*% word.topic.distribution 
+rownames(pred) <- name.order
 
-rank <- apply(pred, 1, function(x) rank(x, ties.method = 'random'))
-
+rank <- t(apply(pred, 1, function(x) (length(x) - rank(x, ties.method = 'random') + 1)))
+write.csv(rank, file = "Project4_data/rank.csv")

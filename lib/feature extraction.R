@@ -71,6 +71,13 @@ save(music_new, file = "Project4_data/music_new.RData")
 # Feature extraction function
 feature.extraction <- function(music_new, i){
   
+  n.bars <- 200
+  n.beats <- 500
+  n.section <- 10
+  n.segments <- 800
+  n.segments_pitch <- 10000
+  n.tatums <- 1000
+  
   # Extract same length of information from each song
   get_value <- function(x, factor, n){
     t <- x[[factor]]

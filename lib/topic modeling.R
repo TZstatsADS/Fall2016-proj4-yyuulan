@@ -7,7 +7,7 @@ lyr <- data.matrix(lyr)
 # list.nomissing.RData is the list of songs have missing features
 # list.nomissing.RData is under the data file
 # We remove those songs from lyr.RData
-load("Fall2016-proj4-yyuulan/data/list.nomissing.RData")
+load("Project4_data/list.nomissing.RData")
 lyr <- lyr[unlist(list.nomissing),]
 
 # Remove the first ID column
@@ -24,7 +24,7 @@ get.terms <- function(x) {
 }
 documents <- lapply(lyr.list, get.terms)
 documents[1]
-save(documents, file = "Fall2016-proj4-yyuulan/data/documents.RData")
+save(documents, file = "Project4_data/documents.RData")
 
 # Compute some statistics related to the data set:
 D <- length(documents)  # number of songs (2,350)
@@ -47,13 +47,13 @@ fit.song <- lda.collapsed.gibbs.sampler(documents = documents, K = K, vocab = vo
                                    eta = eta, initial = NULL, burnin = 0,
                                    compute.log.likelihood = TRUE)
 t2 <- Sys.time()
-t2 - t1
-save(fit.song, file = "Fall2016-proj4-yyuulan/data/topicmodelling.RData")
+t2 - t1 # Time difference of 7.727313 mins
+save(fit.song, file = "Project4_data/topicmodeling.RData")
 
 # The distribution matrix of each words with respect to different topics
 word.topic.distribution <- t(apply(t(fit.song$topics) + eta, 2, function(x) x/sum(x)))
-save(word.topic.distribution, file = "Fall2016-proj4-yyuulan/data/word.topic.distribution.RData")
+save(word.topic.distribution, file = "Project4_data/word.topic.distribution.RData")
 
 # The list of topics for different songs predicted by topic modeling
 topic.distribution <- apply(fit.song$document_sums + alpha, 2, function(x) which.max(x))
-save(topic.distribution, file = "Fall2016-proj4-yyuulan/data/topic.distribution.RData")
+save(topic.distribution, file = "Project4_data/topic.distribution.RData")

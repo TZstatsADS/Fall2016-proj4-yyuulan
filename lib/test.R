@@ -1,5 +1,5 @@
-# load the h5 files and save all information into a list variable
-# save the list variable as a Rdata file
+# Load the h5 files and save all information into a list variable
+# Save the list variable as a Rdata file
 names <- list.files("Project4_data/TestSongFile100", pattern="*.h5", full.names=TRUE)
 music.test <- lapply(names[1:length(names)], function(x) h5read(x,"/analysis"))
 test.name <- paste(rep("testsong",100), c(1:100), sep = '')
@@ -18,3 +18,4 @@ prob.test[,colnames(prob.test) %in% colnames(prob)] = prob
 pred = prob.test %*% word.topic.distribution 
 
 rank <- apply(pred, 1, function(x) rank(x, ties.method = 'random'))
+

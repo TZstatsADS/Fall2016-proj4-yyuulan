@@ -8,11 +8,11 @@ library(stringr)
 setwd("/Users/jiwenyou/Desktop")
 common_id <- read.table("~/Desktop/Project4_data/common_id.txt", quote="\"", comment.char="")
 common_id <- as.vector(common_id$V1)
-load("Fall2016-proj4-yyuulan/data/music.RData")
-load("Fall2016-proj4-yyuulan/data/music_new.RData")
+load("Project4_data/music.RData")
+load("Project4_data/music_new.RData")
 
-# load the h5 files and save all information into a list variable
-# save the list variable as  music.Rdata file
+# Load the h5 files and save all information into a list variable
+# Save the list variable as  music.Rdata file
 filenames <- vector()
 for (a in c("A", "B")){
   for (b in LETTERS){
@@ -24,10 +24,10 @@ for (a in c("A", "B")){
 }
 music <- lapply(filenames[1:length(filenames)], function(x) h5read(x,"/analysis"))
 names(music) <- common_id$V1[1:length(filenames)]
-save(music, file = "Fall2016-proj4-yyuulan/data/music.RData")
+save(music, file = "Project4_data/music.RData")
 
 
-# set the legth cut off value for different music descriptive factors according to the histogram
+# Set the legth cut off value for different music descriptive factors according to the histogram
 bars_confidence_length <- unlist(lapply(music, function(x) length(x$bars_confidence)))
 beats_confidence_length <- unlist(lapply(music, function(x) length(x$beats_confidence)))
 sections_confidence <- unlist(lapply(music, function(x) length(x$sections_confidence)))
@@ -61,16 +61,16 @@ remove <- function(music){
   }
 }
 list.nomissing <- lapply(music, function(x) remove(x))
-save(list.nomissing, file = "Fall2016-proj4-yyuulan/data/list.nomissing.RData")
+save(list.nomissing, file = "Project4_data/list.nomissing.RData")
 music_new <- music[unlist(list.nomissing)]
-save(music_new, file = "Fall2016-proj4-yyuulan/data/music_new.RData")
+save(music_new, file = "Project4_data/music_new.RData")
 
 
 ####################################################################################
-# feature extraction function
+# Feature extraction function
 feature.extraction <- function(music_new, i){
   
-  # extract same length of information from each song
+  # Extract same length of information from each song
   get_value <- function(x, factor, n){
     t <- x[[factor]]
     while(length(t) < n){
@@ -122,10 +122,10 @@ t2 - t1 # Time difference of 10.34193 mins
 
 # Save the loading matrix for future prediciton
 loading <- pca$rotation
-save(loading, file = "Fall2016-proj4-yyuulan/data/loading.RData")
+save(loading, file = "Project4_data/loading.RData")
 # Tranform the original data to the reduced dimensional data
 music.data.transform <- factor.all %*% loading
-save(music.data.transform, file = "Fall2016-proj4-yyuulan/data/music.data.transform.RData")
+save(music.data.transform, file = "Project4_data/music.data.transform.RData")
 
 
 ###################################################################################
@@ -139,4 +139,5 @@ t1 <- Sys.time()
 randomForest.fit <- randomForest(x = music.data.transform, y = as.factor(label))
 t2 <- Sys.time()
 t2 - t1 # Time difference of 5.638203 mins
-save(randomForest.fit, file = "Fall2016-proj4-yyuulan/data/randomForest.fit.RData")
+save(randomForest.fit, file = "Project4_data/randomForest.fit.RData")
+
